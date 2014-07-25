@@ -79,14 +79,24 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FKR-sS-4cN">
-                                <rect key="frame" x="139" y="527" width="42" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="X" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FKR-sS-4cN">
+                                <rect key="frame" x="225" y="527" width="11" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="0.032542830760000002" blue="0.085557631940000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Your move player" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2u-HC-rRP">
+                                <rect key="frame" x="84" y="527" width="133" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="gRL-t2-K0l" appends="YES" id="xbx-vC-Ox4"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="myLabelEight" destination="olM-Is-26a" id="oT5-n4-yPO"/>
@@ -98,14 +108,13 @@
                         <outlet property="myLabelSix" destination="3hF-zB-uc9" id="A0k-J8-KPa"/>
                         <outlet property="myLabelThree" destination="Ai3-UL-zL0" id="HkN-db-Vtp"/>
                         <outlet property="myLabelTwo" destination="gda-gb-gsI" id="2uU-b8-wkI"/>
-                        <outlet property="whichPlayer" destination="FKR-sS-4cN" id="fFA-Zg-pjc"/>
                         <outlet property="whichPlayerLabel" destination="FKR-sS-4cN" id="bdU-V7-5GK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="gRL-t2-K0l">
                     <connections>
-                        <action selector="onLabelTapped:" destination="vXZ-lx-hvc" id="Xvc-mX-S3S"/>
+                        <action selector="onLabelTapped:" destination="vXZ-lx-hvc" id="TFq-h5-u4r"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

@@ -21,24 +21,46 @@
 @property (weak, nonatomic) IBOutlet UILabel *myLabelNine;
 @property (weak, nonatomic) IBOutlet UILabel *whichPlayerLabel;
 
+@property CGRect labelGridRect;
+
 @end
 
 @implementation ViewController
 
+enum player{
+    x,o
+};
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    // Labels will remain constant in size and location, for more fancy manners, create constants
+	self.labelGridRect = CGRectMake(self.myLabelOne.frame.origin.x,
+                                self.myLabelOne.frame.origin.y,
+                                self.myLabelOne.frame.size.width * 3.0,
+                                self.myLabelOne.frame.size.width * 3.0) ;
 }
 
-- (void) findLabelUsingPoint:(CGPoint)point
+- (UILabel *) findLabelUsingPoint:(CGPoint)point
 {
+    UILabel * referencedLabel = nil;
+    //making sure that the label the user touches is one in the grid
+    if (CGRectContainsPoint(self.labelGridRect, point)){
+        referencedLabel = (UILabel*)[self.view hitTest:point withEvent:nil];
+    }
     
+    self.myLabelOne.userInteractionEnabled = YES;
+    
+    bool blah = [self.myLabelOne pointInside:point withEvent:nil];
+    
+    return referencedLabel;
 }
 
-- (IBAction)onLabelTapped:(UITapGestureRecognizer *)sender
-{
-    [sender locationInView:self.view];
+- (IBAction)onLabelTapped:(UITapGestureRecognizer*)sender {
+
+    UILabel *referencedLabel = [self findLabelUsingPoint: [sender locationInView:self.view]];
+    
+    referencedLabel.text = @"8=D";
     
 }
 
