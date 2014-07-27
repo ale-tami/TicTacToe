@@ -8,8 +8,15 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()
+@interface ViewController () <UIAlertViewDelegate>
 
+typedef enum {
+    X_PLAYER = 0,
+    O_PLAYER = 1,
+    NONE = 2
+} Player;
+
+//TAGS set in story board
 @property (weak, nonatomic) IBOutlet UILabel *myLabelOne;
 @property (weak, nonatomic) IBOutlet UILabel *myLabelTwo;
 @property (weak, nonatomic) IBOutlet UILabel *myLabelThree;
@@ -22,14 +29,13 @@
 @property (weak, nonatomic) IBOutlet UILabel *whichPlayerLabel;
 
 @property CGRect labelGridRect;
+@property Player playerTurn;
+//@property (strong, nonatomic) NSMutableArray *grid;
 
 @end
 
-@implementation ViewController
 
-enum player{
-    x,o
-};
+@implementation ViewController
 
 - (void)viewDidLoad
 {
@@ -38,21 +44,21 @@ enum player{
 	self.labelGridRect = CGRectMake(self.myLabelOne.frame.origin.x,
                                 self.myLabelOne.frame.origin.y,
                                 self.myLabelOne.frame.size.width * 3.0,
-                                self.myLabelOne.frame.size.width * 3.0) ;
+                                self.myLabelOne.frame.size.height * 3.0) ;
+    
+    self.playerTurn = X_PLAYER; //x starts
 }
 
 - (UILabel *) findLabelUsingPoint:(CGPoint)point
 {
     UILabel * referencedLabel = nil;
+    
     //making sure that the label the user touches is one in the grid
     if (CGRectContainsPoint(self.labelGridRect, point)){
+        // User interaction enabled from storyboard
         referencedLabel = (UILabel*)[self.view hitTest:point withEvent:nil];
     }
-    
-    self.myLabelOne.userInteractionEnabled = YES;
-    
-    bool blah = [self.myLabelOne pointInside:point withEvent:nil];
-    
+        
     return referencedLabel;
 }
 
@@ -60,9 +66,147 @@ enum player{
 
     UILabel *referencedLabel = [self findLabelUsingPoint: [sender locationInView:self.view]];
     
-    referencedLabel.text = @"8=D";
+    if (referencedLabel.text.length == 0) {
+    
+        if (self.playerTurn == X_PLAYER) {
+            
+            referencedLabel.text = @"X";
+            referencedLabel.textColor = [UIColor redColor];
+            
+            self.whichPlayerLabel.textColor = [UIColor blueColor];
+            self.whichPlayerLabel.text = @"O";
+            
+            self.playerTurn = O_PLAYER;
+            
+        } else {
+            
+            referencedLabel.text = @"O";
+            referencedLabel.textColor = [UIColor blueColor];
+            
+            self.whichPlayerLabel.textColor = [UIColor redColor];
+            self.whichPlayerLabel.text = @"X";
+            
+            self.playerTurn = X_PLAYER;
+            
+        }
+
+    }
+    
+    NSString *winner = [self whoWon];
+    
+    if (winner.length != 0) {
+        
+        self.whichPlayerLabel.text = [winner stringByAppendingString:@" You won!"];
+        self.whichPlayerLabel.textColor = [UIColor greenColor];
+        
+        UIAlertView * alertView = [[UIAlertView alloc]init];
+        
+        alertView.delegate = self;
+        
+        alertView.title = @"We have a winner!";
+        alertView.message = [winner stringByAppendingString:@" You won!"];
+        [alertView addButtonWithTitle:@"Play again"];
+        
+        [alertView show];
+    }
+    
+    
     
 }
+
+- (NSString *) whoWon
+{
+    
+    if ([self checkWinForPlayer:@"X"]){
+        return @"X";
+    } else if ([self checkWinForPlayer:@"Y"]){
+        return @"Y";
+    } else {
+        return @"";
+    }
+    
+}
+
+- (BOOL) checkWinForPlayer:(NSString*) player
+{
+    
+    // Original idea was to check in a matrix the game state but, too large to code, so...
+    // going for the infamous if
+
+
+    if (([self.myLabelOne.text isEqualToString:player] &&
+         [self.myLabelTwo.text isEqualToString:player] &&
+         [self.myLabelThree.text isEqualToString:player]) ||  //across the bottom
+       
+        ([self.myLabelFour.text isEqualToString:player] &&
+         [self.myLabelFive.text isEqualToString:player] &&
+         [self.myLabelSix.text isEqualToString:player]) || //across the middle
+        
+        ([self.myLabelSeven.text isEqualToString:player] &&
+         [self.myLabelEight.text isEqualToString:player] &&
+         [self.myLabelNine.text isEqualToString:player]) || //across the top
+        
+        ([self.myLabelOne.text isEqualToString:player] &&
+         [self.myLabelFour.text isEqualToString:player] &&
+         [self.myLabelSeven.text isEqualToString:player]) || //down the left side
+        
+        ([self.myLabelTwo.text isEqualToString:player] &&
+         [self.myLabelFive.text isEqualToString:player] &&
+         [self.myLabelEight.text isEqualToString:player]) || //down the middle
+        
+        ([self.myLabelThree.text isEqualToString:player] &&
+         [self.myLabelSix.text isEqualToString:player] &&
+         [self.myLabelNine.text isEqualToString:player]) || //down the right side
+        
+        ([self.myLabelOne.text isEqualToString:player] &&
+         [self.myLabelFive.text isEqualToString:player] &&
+         [self.myLabelNine.text isEqualToString:player]) || //diagonal
+        
+        ([self.myLabelThree.text isEqualToString:player] &&
+         [self.myLabelFive.text isEqualToString:player] &&
+         [self.myLabelSeven.text isEqualToString:player])){// other diagonal
+            
+            return YES;
+        
+        
+        } else {
+            
+            return NO;
+        }
+
+
+}
+
+
+- (IBAction)onLabelDragged:(UIPanGestureRecognizer*)sender {
+    
+
+}
+
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    
+    self.myLabelOne.text = @"";
+    self.myLabelTwo.text = @"";
+    self.myLabelThree.text = @"";
+    self.myLabelFour.text = @"";
+    self.myLabelFive.text = @"";
+    self.myLabelSix.text = @"";
+    self.myLabelSeven.text = @"";
+    self.myLabelEight.text = @"";
+    self.myLabelNine.text = @"";
+    
+    self.whichPlayerLabel.text = @"X";
+    self.whichPlayerLabel.textColor = [UIColor redColor];
+    
+    self.playerTurn = X_PLAYER;
+    
+}
+
+
+
+
 
 - (void)didReceiveMemoryWarning
 {
