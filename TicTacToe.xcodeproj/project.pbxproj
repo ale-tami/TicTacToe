@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D42304B1985915E003FBC98 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D42304A1985915E003FBC98 /* WebViewController.m */; };
 		4D8466281981A69800CA6528 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8466271981A69800CA6528 /* Foundation.framework */; };
 		4D84662A1981A69800CA6528 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D8466291981A69800CA6528 /* CoreGraphics.framework */; };
 		4D84662C1981A69800CA6528 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D84662B1981A69800CA6528 /* UIKit.framework */; };
@@ -35,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4D4230491985915E003FBC98 /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		4D42304A1985915E003FBC98 /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		4D8466241981A69800CA6528 /* TicTacToe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D8466271981A69800CA6528 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		4D8466291981A69800CA6528 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -123,6 +126,8 @@
 				4D84663D1981A69900CA6528 /* ViewController.m */,
 				4D84663F1981A69900CA6528 /* Images.xcassets */,
 				4D84662E1981A69800CA6528 /* Supporting Files */,
+				4D4230491985915E003FBC98 /* WebViewController.h */,
+				4D42304A1985915E003FBC98 /* WebViewController.m */,
 			);
 			path = TicTacToe;
 			sourceTree = "<group>";
@@ -256,6 +261,7 @@
 				4D84663E1981A69900CA6528 /* ViewController.m in Sources */,
 				4D8466381981A69900CA6528 /* AppDelegate.m in Sources */,
 				4D8466341981A69800CA6528 /* main.m in Sources */,
+				4D42304B1985915E003FBC98 /* WebViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,6 +478,7 @@
 				4D8466581981A69900CA6528 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4D8466591981A69900CA6528 /* Build configuration list for PBXNativeTarget "TicTacToeTests" */ = {
 			isa = XCConfigurationList;
@@ -480,6 +487,7 @@
 				4D84665B1981A69900CA6528 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

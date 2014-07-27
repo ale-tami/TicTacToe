@@ -27,7 +27,9 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UILabel *myLabelEight;
 @property (weak, nonatomic) IBOutlet UILabel *myLabelNine;
 @property (weak, nonatomic) IBOutlet UILabel *whichPlayerLabel;
+@property (weak, nonatomic) IBOutlet UILabel *myFirstMoveChip;
 
+@property BOOL gameBegun;
 @property CGRect labelGridRect;
 @property Player playerTurn;
 //@property (strong, nonatomic) NSMutableArray *grid;
@@ -47,6 +49,8 @@ typedef enum {
                                 self.myLabelOne.frame.size.height * 3.0) ;
     
     self.playerTurn = X_PLAYER; //x starts
+    
+    self.gameBegun = NO;
 }
 
 - (UILabel *) findLabelUsingPoint:(CGPoint)point
@@ -63,56 +67,89 @@ typedef enum {
 }
 
 - (IBAction)onLabelTapped:(UITapGestureRecognizer*)sender {
+    
+    if (self.gameBegun) {
+        
+        [NSTimer scheduledTimerWithTimeInterval:10.0
+                                         target:self
+                                       selector:@selector(forfeitTurn)
+                                       userInfo:nil
+                                        repeats:NO];
+    
+        UILabel *referencedLabel = [self findLabelUsingPoint: [sender locationInView:self.view]];
+        
+        if (referencedLabel.text.length == 0) {
+        
+            if (self.playerTurn == X_PLAYER) {
+                
+                referencedLabel.text = @"X";
+                referencedLabel.textColor = [UIColor redColor];
+                
+                self.whichPlayerLabel.textColor = [UIColor blueColor];
+                self.whichPlayerLabel.text = @"O";
+                
+                self.playerTurn = O_PLAYER;
+                
+            } else {
+                
+                referencedLabel.text = @"O";
+                referencedLabel.textColor = [UIColor blueColor];
+                
+                self.whichPlayerLabel.textColor = [UIColor redColor];
+                self.whichPlayerLabel.text = @"X";
+                
+                self.playerTurn = X_PLAYER;
+                
+            }
 
-    UILabel *referencedLabel = [self findLabelUsingPoint: [sender locationInView:self.view]];
-    
-    if (referencedLabel.text.length == 0) {
-    
-        if (self.playerTurn == X_PLAYER) {
-            
-            referencedLabel.text = @"X";
-            referencedLabel.textColor = [UIColor redColor];
-            
-            self.whichPlayerLabel.textColor = [UIColor blueColor];
-            self.whichPlayerLabel.text = @"O";
-            
-            self.playerTurn = O_PLAYER;
-            
-        } else {
-            
-            referencedLabel.text = @"O";
-            referencedLabel.textColor = [UIColor blueColor];
-            
-            self.whichPlayerLabel.textColor = [UIColor redColor];
-            self.whichPlayerLabel.text = @"X";
-            
-            self.playerTurn = X_PLAYER;
-            
         }
+        
+        NSString *winner = [self whoWon];
+        
+        if (winner.length != 0) {
+            
+            self.whichPlayerLabel.text = [winner stringByAppendingString:@" You won!"];
+            self.whichPlayerLabel.textColor = [UIColor greenColor];
+            
+            UIAlertView * alertView = [[UIAlertView alloc]init];
+            
+            alertView.delegate = self;
+            
+            alertView.title = @"We have a winner!";
+            alertView.message = [winner stringByAppendingString:@" You won!"];
+            [alertView addButtonWithTitle:@"Play again"];
+            
+            [alertView show];
+        }
+    
+    }
+    
+}
 
+
+- (void) forfeitTurn {
+
+    
+    if (self.playerTurn == X_PLAYER) {
+        
+        self.whichPlayerLabel.textColor = [UIColor blueColor];
+        self.whichPlayerLabel.text = @"O";
+        
+        self.playerTurn = O_PLAYER;
+        
+    } else {
+        
+        self.whichPlayerLabel.textColor = [UIColor redColor];
+        self.whichPlayerLabel.text = @"X";
+        
+        self.playerTurn = X_PLAYER;
+        
     }
-    
-    NSString *winner = [self whoWon];
-    
-    if (winner.length != 0) {
-        
-        self.whichPlayerLabel.text = [winner stringByAppendingString:@" You won!"];
-        self.whichPlayerLabel.textColor = [UIColor greenColor];
-        
-        UIAlertView * alertView = [[UIAlertView alloc]init];
-        
-        alertView.delegate = self;
-        
-        alertView.title = @"We have a winner!";
-        alertView.message = [winner stringByAppendingString:@" You won!"];
-        [alertView addButtonWithTitle:@"Play again"];
-        
-        [alertView show];
-    }
-    
+
     
     
 }
+
 
 - (NSString *) whoWon
 {
@@ -174,14 +211,53 @@ typedef enum {
             return NO;
         }
 
-
 }
 
 
 - (IBAction)onLabelDragged:(UIPanGestureRecognizer*)sender {
     
+    CGPoint point = [sender translationInView:self.view];
+    
+    self.myFirstMoveChip.transform = CGAffineTransformMakeTranslation(point.x, point.y);
+    
+    point.x += self.myFirstMoveChip.center.x;
+    point.y += self.myFirstMoveChip.center.y;
+    
+    
+    if (sender.state == UIGestureRecognizerStateEnded){
+        
+        //thank you brain for the findLabelUsingPoint method
+        self.myFirstMoveChip.alpha = 0.0;
+        self.myFirstMoveChip.userInteractionEnabled = NO;
+
+        UILabel *referencedLabel = [self findLabelUsingPoint: [sender locationInView:self.view]];
+    
+        //I could not repeat this code, but, not today
+        if (CGRectContainsPoint(referencedLabel.frame, point))
+        {
+            referencedLabel.text = @"X";
+            referencedLabel.textColor = [UIColor redColor];
+            
+            self.whichPlayerLabel.textColor = [UIColor blueColor];
+            self.whichPlayerLabel.text = @"O";
+            
+            self.playerTurn = O_PLAYER;
+            
+            self.gameBegun = YES;
+            
+            [NSTimer scheduledTimerWithTimeInterval:10.0
+                                             target:self
+                                           selector:@selector(forfeitTurn)
+                                           userInfo:nil
+                                            repeats:NO];
+
+        }
+
+    }
 
 }
+
+
 
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
@@ -204,6 +280,11 @@ typedef enum {
     
 }
 
+
+
+- (IBAction)goBack:(UIStoryboardSegue *) sender
+{
+}
 
 
 
